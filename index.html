@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control, .form-group select {
+            width: 100%;
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            font-size: 16px;
+        }
+        .btn {
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background-color: #5a67d8;
+            border: none;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: #4c51bf;
+        }
+        .btn-secondary {
+            background-color: #4c51bf;
+            border: none;
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background-color: #434190;
+        }
+        .btn-success {
+            background-color: #667eea;
+            border: none;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background-color: #5a67d8;
+        }
+        .btn-warning {
+            background-color: #a3bffa;
+            border: none;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background-color: #7f9cf5;
+        }
+        .btn-danger {
+            background-color: #edf2f7;
+            border: none;
+            color: #333;
+        }
+        .btn-danger:hover {
+            background-color: #e2e8f0;
+        }
+        .table {
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table thead {
+            background-color: #4c51bf;
+            color: #fff;
+        }
+        .table tbody tr {
+            background-color: #edf2f7;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #e2e8f0;
+        }
+        .table td, .table th {
+            border: none;
+            padding: 15px;
+            text-align: center;
+        }
+        .btn-block {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .container h3 {
+            color: #4c51bf;
+        }
+        #customWorkoutName {
+            display: none;
+            margin-top: 10px;
+        }
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #5a67d8;
+            color: #fff;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .workout-header h4 {
+            margin: 0;
+        }
+        .workout-header .toggle-icon {
+            font-size: 20px;
+        }
+        .workout-details {
+            display: none;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Workout Tracker</h1>
+
+        <div id="setWorkoutDiv" class="mb-4">
+            <div class="form-group">
+                <select id="workoutNameDropdown" class="form-control" required>
+                    <option value="">Select Workout Name</option>
+                    <option value="Chest Day">Chest Day</option>
+                    <option value="Arms Day">Arms Day</option>
+                    <option value="Legs Day">Legs Day</option>
+                    <option value="Back Day">Back Day</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="text" id="customWorkoutName" class="form-control" placeholder="Enter Custom Workout Name" />
+            </div>
+            <div class="form-group">
+                <input type="date" id="workoutDate" class="form-control" required>
+            </div>
+            <button id="setWorkoutName" class="btn btn-primary btn-block">Set Workout</button>
+        </div>
+
+        <!-- Current Workout Section -->
+        <div id="currentWorkoutSection" class="mt-4 hidden">
+            <h2>Current Workout</h2>
+            <h3><span id="currentWorkoutName"></span> (<span id="currentWorkoutDate"></span>)</h3>
+            <h4>Current Exercise: <span id="currentExerciseName"></span></h4>
+
+            <!-- Exercise Form Inputs -->
+            <div id="setExerciseDiv" class="mb-4">
+                <div class="form-group">
+                    <input type="text" id="exerciseName" class="form-control" placeholder="Exercise Name (e.g., Benchpress)" required>
+                </div>
+                <button id="setExerciseName" class="btn btn-secondary btn-block">Set Exercise</button>
+            </div>
+
+            <!-- Workout Form -->
+            <div id="workoutForm" class="hidden">
+                <div class="form-group">
+                    <input type="number" id="set" class="form-control" placeholder="Set #" readonly required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="reps" class="form-control" placeholder="Reps" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="weight" class="form-control" placeholder="Weight (lbs)" required>
+                </div>
+                <button type="submit" id="addSetButton" class="btn btn-success btn-block">Add Set</button>
+                <button id="addSetAndNextExercise" class="btn btn-warning btn-block">Add Set & Next Exercise</button>
+                <button id="finishWorkout" class="btn btn-danger btn-block">Finish Workout</button>
+            </div>
+
+            <!-- Exercise Table -->
+            <table id="workoutTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Set #</th>
+                        <th>Reps</th>
+                        <th>Weight (lbs)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Workout Log Section -->
+        <div id="workoutLog" class="mt-5">
+            <h2>Workout Log</h2>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

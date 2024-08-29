@@ -223,6 +223,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
             workoutHeader.classList.add('workout-header');
             workoutHeader.innerHTML = `<h4>${workout.name} (${new Date(workout.date).toLocaleDateString()})</h4><span class="toggle-icon">+</span>`;
+
+            // Create a delete button for each workout
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
+            deleteButton.style.marginLeft = '10px';
+            deleteButton.addEventListener('click', function () {
+                deleteWorkout(index);
+            });
+
+            workoutHeader.appendChild(deleteButton);
+
             workoutDetails.classList.add('workout-details');
 
             workout.exercises.forEach(exercise => {
@@ -269,6 +281,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
+    }
+
+    // Delete a workout
+    function deleteWorkout(index) {
+        workoutData.splice(index, 1); // Remove the workout from the array
+        saveWorkoutData(); // Save the updated workout data
+        updateWorkoutLog(); // Refresh the workout log display
     }
 
     // Reset the form after finishing a workout

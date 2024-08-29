@@ -4,6 +4,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentSetNumber = 1;
     let workoutData = [];
 
+    // Load workout data from local storage when the page loads
+    function loadWorkoutData() {
+        const savedData = localStorage.getItem('workoutData');
+        if (savedData) {
+            workoutData = JSON.parse(savedData);
+            updateWorkoutLog(); // Update the UI with the loaded data
+        }
+    }
+
+    // Save the workout data to local storage
+    function saveWorkoutData() {
+        localStorage.setItem('workoutData', JSON.stringify(workoutData));
+    }
+
+    loadWorkoutData();
+
     // Handle custom workout name visibility
     const workoutNameDropdown = document.getElementById('workoutNameDropdown');
     const customWorkoutName = document.getElementById('customWorkoutName');
@@ -127,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 displayCurrentWorkout(); // Update the table after adding a set
 
                 currentWorkout.exercises.push(currentExercise);
+                saveWorkoutData(); // Save the workout data
                 updateWorkoutLog(); // Update the workout log after completing the exercise
 
                 currentExercise = null;
@@ -170,6 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 workoutData.push(currentWorkout);
+                saveWorkoutData(); // Save the workout data
                 updateWorkoutLog(); // Update the workout log after finishing the workout
                 resetForm();
             }
